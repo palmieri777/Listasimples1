@@ -1,53 +1,120 @@
-package com.example.listasimples
+package com.example.loginsenai
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ListView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import com.example.listasimples1.paginaInicial
+import com.example.login_senai.R
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
+    val COD_TELA = 2
+    private val autentication by lazy {
+        FirebaseAuth.getInstance()
+    }
+
+    data class UserModelo(val email: String, val senha: String)
+    override fun onStart() {
+        super.onStart()
+
+        val user = autentication.currentUser
+        if (user != null) {
+
+            abrirInicio()
+
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val etnovatarefa = findViewById<EditText>(R.id.etnovatarefa)
-        val btadd = findViewById<Button>(R.id.btadd)
-        val lvtarefas = findViewById<ListView>(R.id.lvtarefas)
+        var login = findViewById<Button>(R.id.btnLogin)
+        var cadastro = findViewById<Button>(R.id.btnCadastro)
+        val email = findViewById<EditText>(R.id.etEmail)
+        val senha = findViewById<EditText>(R.id.etSenha)
+        // val txtemail = intent.getStringExtra("email")
+        //  email.setText(txtemail)
+        //  val txtsenha = intent.getStringExtra("senha")
+        //  senha.setText(txtsenha)
 
-        val listaTarefas: ArrayList<String> = ArrayList()
+        login.setOnClickListener {
+            var email = findViewById<EditText>(R.id.etEmail)
+            var senha = findViewById<EditText>(R.id.etSenha)
+            var txtEmail = email?.text.toString()
+            var txtSenha = senha?.text.toString()
 
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, listaTarefas)
 
-        lvtarefas.adapter = adapter
+            if (txtEmail.isNullOrEmpty() && txtSenha.isNullOrEmpty()) {
+                Toast.makeText(this, "Preencher todos os campos", Toast.LENGTH_SHORT).show()
 
-        btadd.setOnClickListener{
-            if (etnovatarefa.text.isNullOrEmpty()){
-                Toast.makeText(this, "Digite uma tarefa...", Toast.LENGTH_SHORT).show()
             } else {
-                listaTarefas.add(etnovatarefa.text.toString())
-                adapter.notifyDataSetChanged()
-                etnovatarefa.setText("")
+                login()
             }
+
         }
+        cadastro.setOnClickListener {
+            var email = findViewById<EditText>(R.id.etEmail)
+            var senha = findViewById<EditText>(R.id.etSenha)
+            var txtEmail = email?.text.toString()
+            var txtSenha = senha?.text.toString()
 
-        lvtarefas.setOnItemLongClickListener{ _, _, position, _ ->
-            val alerta = AlertDialog.Builder(this)
-            alerta.setTitle("Atenção")
-            alerta.setMessage("Quer mesmo excluir esse item?")
-            alerta.setPositiveButton("Confirmar") {dialog, _ ->
-
-                listaTarefas.removeAt(position)
-                adapter.notifyDataSetChanged()
-                dialog.dismiss()
+            if (txtEmail.isNullOrEmpty() && txtSenha.isNullOrEmpty()) {
+                Toast.makeText(this, "Preencher todos os campos", Toast.LENGTH_SHORT).show()
+            } else {
+                cadastro()
             }
-            alerta.setNegativeButton("Cancelar") { dialog, _ ->
-                dialog.dismiss()
-            }
-            alerta.create().show()
-            true
         }
     }
+
+    fun cadastro() {
+        var email = findViewById<EditText>(R.id.etEmail)
+        var senha = findViewById<EditText>(R.id.etSenha)
+        var txtEmail = email?.text.toString()
+        var txtSenha = senha?.text.toString()
+        val usuario = UserModelo(txtEmail,txtSenha)
+        autentication.createUserWithEmailAndPassword(
+            usuario.email, usuario.senha
+        ).addOnSuccessListener {
+            Toast.makeText(this, "cadastrado com sucesso!", Toast.LENGTH_LONG).show()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Erro ao efetuar o cadastro", Toast.LENGTH_LONG).show()
+        }
+    }
+    fun login() {
+        var email = findViewById<EditText>(R.id.etEmail)
+        var senha = findViewById<EditText>(R.id.etSenha)
+        var txtEmail = email?.text.toString()
+        var txtSenha = senha?.text.toString()
+        val usuario = UserModelo(txtEmail,txtSenha)
+        autentication.signInWithEmailAndPassword(
+            usuario.email, usuario.senha).addOnSuccessListener {
+            abrirInicio()
+        }.addOnFailureListener{
+            Toast.makeText(this, "erro ao efetuar o login", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun abrirInicio() {
+        var email = findViewById<EditText>(R.id.etEmail)
+        var senha = findViewById<EditText>(R.id.etSenha)
+        var txtEmail = email?.text.toString()
+        var txtSenha = senha?.text.toString()
+        val usuario = UserModelo(txtEmail,txtSenha)
+        val intent = Intent(this, paginaInicial::class.java).apply {
+            putExtra("senha", usuario.senha)
+            putExtra("email", usuario.email)
+            email.setText("")
+            senha.setText("")
+
+
+        }
+
+        startActivityForResult(intent,COD_TELA)
+
+
+    }
+
+
 }

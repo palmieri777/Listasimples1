@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "855808641394",
+    "project_id": "loginsenai-e50a7",
+    "storage_bucket": "loginsenai-e50a7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855808641394:android:b3339981fcd5a2f0dc35eb",
+        "android_client_info": {
+          "package_name": "com.example.login_senai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0IJoKqqtuL9SQJ-vSLpAwv1mDFQwU6TY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
