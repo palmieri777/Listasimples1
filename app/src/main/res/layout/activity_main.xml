@@ -62,6 +62,7 @@
         android:id="@+id/btnCadastro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#F44336"
         android:onClick="cadastro"
         android:text="Cadastro"
         android:textSize="24sp"
@@ -69,6 +70,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin"
-        app:layout_constraintVertical_bias="0.104" />
+        app:layout_constraintVertical_bias="0.104"
+        app:strokeColor="#F44336" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="280dp"
+        android:layout_height="178dp"
+        android:src="@drawable/logoSenai"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnCadastro"
+        app:layout_constraintVertical_bias="0.301"
+        tools:layout_editor_absoluteX="65dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
